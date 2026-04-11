@@ -1,0 +1,1 @@
+const res=document.getElementById('res');function run(){let words=text.value.match(/\w+/g)||[];res.innerText='Words: '+words.length;}

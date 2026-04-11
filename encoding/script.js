@@ -1,0 +1,1 @@
+const res=document.getElementById('res');function run(){res.innerText='Bytes: '+new TextEncoder().encode(text.value).length;}

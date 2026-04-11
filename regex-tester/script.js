@@ -1,0 +1,1 @@
+const res=document.getElementById('res');function run(){try{let r=new RegExp(pattern.value);res.innerText=r.test(text.value)?'Match':'No match';}catch(e){res.innerText='Invalid regex';}}
