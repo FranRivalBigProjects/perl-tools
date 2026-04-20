@@ -1,200 +1,662 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Perl Tools Online – Regex Tester, CSV Parser, Debugger & Text Processing Utilities</title>
-
-<meta name="description" content="Advanced Perl tools for developers: regex tester, CSV parser, log analyzer, encoding utilities, and text processing tools. Optimize workflows with fast and powerful Perl utilities.">
-
-<meta name="keywords" content="perl tools online, perl regex tester, perl csv parser, perl debugger tools, perl log parser, perl string manipulation, perl text similarity">
+<title>Perl Tools Online – Regex Tester, CSV Parser, Log Analyzer & Text Processing Utilities</title>
+<meta name="description" content="Free online Perl tools for developers: test Perl regex in real time, parse CSV files, analyze server logs, debug scripts, handle encoding, and run one-liners. No installation required.">
+<meta name="keywords" content="perl tools online, perl regex tester, perl csv parser, perl log parser, perl debugger online, perl one-liner generator, perl string manipulation, perl text similarity, perl encoding tool, perl regex visualizer, online perl interpreter, test perl regex online free">
 
 <meta name="google-site-verification" content="PkLa_ViOo6FAHpvh8SacceMb95o9tePRdrqLNBz9X1M" />
 
+<meta property="og:title" content="Perl Tools Online - Regex Tester, CSV Parser, Log Analyzer and More">
+<meta property="og:description" content="11 free Perl tools for developers: regex testing, CSV parsing, log analysis, encoding, one-liners, and text processing. No installation required.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
+:root {
+    --bg:        #040d1a;
+    --surface:   #080f1f;
+    --surface-2: #0c1628;
+    --border:    #132035;
+    --border-hi: #38bdf840;
+    --accent:    #38bdf8;
+    --accent-2:  #7dd3fc;
+    --accent-dim: rgba(56,189,248,.07);
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --success:   #34d399;
+    --warning:   #fbbf24;
+    --danger:    #f87171;
+
+    --font-display: "Outfit", sans-serif;
+    --font-mono:    "JetBrains Mono", monospace;
+    --radius:    8px;
+    --radius-lg: 16px;
+    --transition: 220ms cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #0f172a;
-    color: #e2e8f0;
-    line-height: 1.6;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
+/* dot matrix background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(56,189,248,.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: -300px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(ellipse at center, rgba(56,189,248,.06) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 28px;
+}
+
+/* HEADER */
 header {
-    background: #020617;
-    padding: 40px 20px;
-    text-align: center;
+    padding: 80px 0 68px;
+    border-bottom: 1px solid var(--border);
+    animation: fadeUp .6s ease both;
 }
 
-h1 {
-    font-size: 2.2rem;
-    margin-bottom: 10px;
+.header-inner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
 }
 
-h2 {
-    color: #38bdf8;
-    margin-top: 40px;
+.header-left { max-width: 680px; }
+
+.header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
 }
 
-main {
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
+.eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: .2; }
+}
+
+header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: #fff;
+    margin-bottom: 18px;
+}
+
+header h1 .hl { color: var(--accent); }
+
+header p {
+    font-size: 1rem;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 540px;
+}
+
+/* tool count badge */
+.tool-count {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.count-num {
+    font-family: var(--font-mono);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+}
+
+.count-label {
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* SECTIONS */
+section {
+    padding: 52px 0;
+    border-bottom: 1px solid var(--border);
+    animation: fadeUp .6s ease both;
+}
+
+section:nth-of-type(1) { animation-delay: .08s; }
+section:nth-of-type(2) { animation-delay: .14s; }
+section:nth-of-type(3) { animation-delay: .20s; }
+section:nth-of-type(4) { animation-delay: .26s; }
+section:nth-of-type(5) { animation-delay: .32s; }
+section:nth-of-type(6) { animation-delay: .38s; }
+section:last-of-type   { border-bottom: none; }
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.section-header h2 {
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+}
+
+.section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* TOOLS GRID */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
 }
 
 .tool {
-    background: #020617;
-    border: 1px solid #1e293b;
-    padding: 20px;
-    margin: 15px 0;
-    border-radius: 10px;
-    transition: 0.3s;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.tool::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity var(--transition);
 }
 
 .tool:hover {
-    border-color: #38bdf8;
+    border-color: rgba(56,189,248,.35);
     transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,.5);
 }
 
-.tool a {
-    color: #38bdf8;
-    text-decoration: none;
-    font-weight: bold;
+.tool:hover::before { opacity: 1; }
+
+.tool-path {
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    letter-spacing: .06em;
+    color: var(--muted);
 }
 
-.tool a:hover {
-    text-decoration: underline;
+.tool-name {
+    font-size: .95rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
 }
 
+.tool-desc {
+    font-size: .845rem;
+    color: var(--muted);
+    font-weight: 300;
+    flex: 1;
+    line-height: 1.55;
+}
+
+.tool-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 4px;
+    transition: gap var(--transition);
+}
+
+.tool-cta::after {
+    content: ">";
+    transition: transform var(--transition);
+}
+
+.tool:hover .tool-cta { gap: 9px; }
+.tool:hover .tool-cta::after { transform: translateX(3px); }
+
+/* USE CASES */
+.use-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+}
+
+.use-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    font-size: .875rem;
+    color: var(--text);
+    transition: border-color var(--transition);
+}
+
+.use-item:hover { border-color: rgba(56,189,248,.25); }
+
+.use-arrow {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+/* FAQ */
+.faq-list { display: flex; flex-direction: column; gap: 12px; }
+
+.faq-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    transition: border-color var(--transition);
+}
+
+.faq-item:hover { border-color: rgba(56,189,248,.25); }
+
+.faq-q {
+    font-size: .95rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.faq-a {
+    font-size: .865rem;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.65;
+}
+
+.faq-a code {
+    font-family: var(--font-mono);
+    font-size: .78em;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border-radius: 4px;
+    padding: 1px 6px;
+}
+
+/* LONG-TAIL TAGS */
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 13px;
+    cursor: default;
+    transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+
+.tag:hover {
+    color: var(--accent);
+    border-color: rgba(56,189,248,.3);
+    background: var(--accent-dim);
+}
+
+/* FOOTER */
 footer {
-    text-align: center;
-    padding: 30px;
-    font-size: 0.9rem;
-    background: #020617;
-    margin-top: 40px;
+    padding: 44px 0;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+}
+
+.footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.footer-brand {
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .04em;
+}
+
+footer p {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--muted);
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+    header { padding: 52px 0 44px; }
+    .header-inner { flex-direction: column; align-items: flex-start; }
+    .tool-count { align-items: flex-start; }
+    .tools-grid { grid-template-columns: 1fr; }
+    .use-grid   { grid-template-columns: 1fr; }
 }
 </style>
 
 </head>
 
 <body>
+<div class="wrapper">
 
+<!-- HEADER -->
 <header>
-    <h1>Perl Tools for Developers, Data Parsing & Regex Testing</h1>
-    <p>Explore powerful Perl-based utilities for parsing, debugging, regex testing, and advanced text processing workflows.</p>
+    <div class="header-inner">
+        <div class="header-left">
+            <div class="header-eyebrow">
+                <span class="eyebrow-dot"></span>
+                Perl Developer Toolkit
+            </div>
+            <h1>
+                Perl Tools for<br>
+                <span class="hl">Regex, Parsing</span><br>
+                &amp; Text Processing
+            </h1>
+            <p>
+                11 free online Perl utilities for developers, data engineers, and automation workflows.
+                Test regex, parse logs, handle encoding, and run one-liners — no installation needed.
+            </p>
+        </div>
+        <div class="tool-count">
+            <span class="count-num">11</span>
+            <span class="count-label">Free tools</span>
+        </div>
+    </div>
 </header>
 
-<main>
-
+<!-- DATA PROCESSING -->
 <section>
-<h2>Data Processing & Parsing Tools</h2>
+    <div class="section-header">
+        <h2>Data Processing &amp; Parsing</h2>
+        <span class="section-rule"></span>
+    </div>
+    <div class="tools-grid">
 
-<div class="tool">
-<p>
-perl-tools/csv/
-Efficient CSV parsing and manipulation for structured data workflows.
-<a href="perl-tools/csv/">Perl CSV Tool</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/csv/">
+            <span class="tool-path">perl-tools/csv/</span>
+            <span class="tool-name">Perl CSV Parser</span>
+            <span class="tool-desc">Parse, filter, and transform CSV files using Perl logic. Handles quoted fields, custom delimiters, and malformed rows.</span>
+            <span class="tool-cta">Open CSV Parser</span>
+        </a>
 
-<div class="tool">
-<p>
-perl-tools/data-extract/
-Extract structured and unstructured data from raw text sources quickly.
-<a href="perl-tools/data-extract/">Perl Data Extract Tool</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/data-extract/">
+            <span class="tool-path">perl-tools/data-extract/</span>
+            <span class="tool-name">Perl Data Extractor</span>
+            <span class="tool-desc">Extract structured and unstructured data from raw text sources using Perl pattern matching and capture groups.</span>
+            <span class="tool-cta">Open Data Extractor</span>
+        </a>
 
-<div class="tool">
-<p>
-perl-tools/file-parse/
-Parse files and automate data extraction from logs, configs, or datasets.
-<a href="perl-tools/file-parse/">Perl File Parser</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/file-parse/">
+            <span class="tool-path">perl-tools/file-parse/</span>
+            <span class="tool-name">Perl File Parser</span>
+            <span class="tool-desc">Parse configuration files, logs, and structured datasets with flexible Perl-based file processing logic.</span>
+            <span class="tool-cta">Open File Parser</span>
+        </a>
 
-<div class="tool">
-<p>
-perl-tools/log-parser/
-Analyze and process server logs with powerful Perl parsing logic.
-<a href="perl-tools/log-parser/">Perl Log Parser</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/log-parser/">
+            <span class="tool-path">perl-tools/log-parser/</span>
+            <span class="tool-name">Perl Log Analyzer</span>
+            <span class="tool-desc">Analyze Apache, Nginx, and custom server logs. Extract errors, IPs, status codes, and request patterns at speed.</span>
+            <span class="tool-cta">Open Log Analyzer</span>
+        </a>
 
+    </div>
 </section>
 
+<!-- DEBUGGING & SCRIPTING -->
 <section>
-<h2>Debugging, Encoding & Scripting</h2>
+    <div class="section-header">
+        <h2>Debugging, Encoding &amp; Scripting</h2>
+        <span class="section-rule"></span>
+    </div>
+    <div class="tools-grid">
 
-<div class="tool">
-<p>
-perl-tools/debugger/
-Debug Perl scripts efficiently and identify runtime issues.
-<a href="perl-tools/debugger/">Perl Debugger Tool</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/debugger/">
+            <span class="tool-path">perl-tools/debugger/</span>
+            <span class="tool-name">Perl Debugger Tool</span>
+            <span class="tool-desc">Identify runtime errors, trace variable state, and debug Perl script logic without a local environment.</span>
+            <span class="tool-cta">Open Debugger</span>
+        </a>
 
-<div class="tool">
-<p>
-perl-tools/encoding/
-Handle character encoding, UTF-8 issues, and text transformations.
-<a href="perl-tools/encoding/">Perl Encoding Tool</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/encoding/">
+            <span class="tool-path">perl-tools/encoding/</span>
+            <span class="tool-name">Perl Encoding Utility</span>
+            <span class="tool-desc">Convert between character encodings, fix UTF-8 issues, and handle Perl's Unicode layer — including use utf8 and binmode.</span>
+            <span class="tool-cta">Open Encoding Tool</span>
+        </a>
 
-<div class="tool">
-<p>
-perl-tools/one-liner/
-Test and generate Perl one-liner scripts for automation tasks.
-<a href="perl-tools/one-liner/">Perl One-Liner Tool</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/one-liner/">
+            <span class="tool-path">perl-tools/one-liner/</span>
+            <span class="tool-name">Perl One-Liner Generator</span>
+            <span class="tool-desc">Build and test Perl one-liners for text substitution, filtering, field extraction, and automation tasks directly in the browser.</span>
+            <span class="tool-cta">Open One-Liner Tool</span>
+        </a>
 
+    </div>
 </section>
 
+<!-- REGEX & TEXT -->
 <section>
-<h2>Regex & Text Processing Tools</h2>
+    <div class="section-header">
+        <h2>Regex &amp; Text Processing</h2>
+        <span class="section-rule"></span>
+    </div>
+    <div class="tools-grid">
 
-<div class="tool">
-<p>
-perl-tools/regex-tester/
-Test and validate Perl regular expressions in real time.
-<a href="perl-tools/regex-tester/">Perl Regex Tester</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/regex-tester/">
+            <span class="tool-path">perl-tools/regex-tester/</span>
+            <span class="tool-name">Perl Regex Tester</span>
+            <span class="tool-desc">Test and validate Perl regular expressions in real time. Supports named captures, lookaheads, modifiers, and global matching.</span>
+            <span class="tool-cta">Open Regex Tester</span>
+        </a>
 
-<div class="tool">
-<p>
-perl-tools/regex-vis/
-Visualize regex patterns and understand matching behavior.
-<a href="perl-tools/regex-vis/">Perl Regex Visualizer</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/regex-vis/">
+            <span class="tool-path">perl-tools/regex-vis/</span>
+            <span class="tool-name">Perl Regex Visualizer</span>
+            <span class="tool-desc">Visualize how Perl regex patterns match and break down input strings. Understand capture groups, alternations, and quantifiers visually.</span>
+            <span class="tool-cta">Open Regex Visualizer</span>
+        </a>
 
-<div class="tool">
-<p>
-perl-tools/string-manip/
-Perform advanced string manipulation and transformation tasks.
-<a href="perl-tools/string-manip/">Perl String Manipulation Tool</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/string-manip/">
+            <span class="tool-path">perl-tools/string-manip/</span>
+            <span class="tool-name">Perl String Manipulation</span>
+            <span class="tool-desc">Perform advanced string operations: substitution, splitting, joining, case transformation, and pattern-based extraction.</span>
+            <span class="tool-cta">Open String Tool</span>
+        </a>
 
-<div class="tool">
-<p>
-perl-tools/text-sim/
-Analyze text similarity and compare string patterns efficiently.
-<a href="perl-tools/text-sim/">Perl Text Similarity Tool</a>
-</p>
-</div>
+        <a class="tool" href="perl-tools/text-sim/">
+            <span class="tool-path">perl-tools/text-sim/</span>
+            <span class="tool-name">Perl Text Similarity Tool</span>
+            <span class="tool-desc">Compare strings and analyze text similarity using Perl algorithms. Useful for deduplication, fuzzy matching, and NLP preprocessing.</span>
+            <span class="tool-cta">Open Text Similarity</span>
+        </a>
 
+    </div>
 </section>
 
-</main>
+<!-- USE CASES -->
+<section>
+    <div class="section-header">
+        <h2>Use Cases</h2>
+        <span class="section-rule"></span>
+    </div>
+    <div class="use-grid">
+        <div class="use-item"><span class="use-arrow">-&gt;</span>Testing Perl regex patterns without a local development environment</div>
+        <div class="use-item"><span class="use-arrow">-&gt;</span>Parsing Apache and Nginx access logs for error analysis</div>
+        <div class="use-item"><span class="use-arrow">-&gt;</span>Converting and cleaning CSV data with custom Perl logic</div>
+        <div class="use-item"><span class="use-arrow">-&gt;</span>Building Perl one-liners for shell automation scripts</div>
+        <div class="use-item"><span class="use-arrow">-&gt;</span>Fixing UTF-8 encoding issues in Perl text processing pipelines</div>
+        <div class="use-item"><span class="use-arrow">-&gt;</span>Extracting structured fields from unstructured log files</div>
+        <div class="use-item"><span class="use-arrow">-&gt;</span>Comparing string similarity for deduplication workflows</div>
+        <div class="use-item"><span class="use-arrow">-&gt;</span>Visualizing complex regex patterns for team documentation</div>
+    </div>
+</section>
 
+<!-- FAQ -->
+<section>
+    <div class="section-header">
+        <h2>Frequently Asked Questions</h2>
+        <span class="section-rule"></span>
+    </div>
+    <div class="faq-list">
+
+        <div class="faq-item">
+            <p class="faq-q">How do I test a Perl regex online without installing Perl?</p>
+            <p class="faq-a">Use the Perl Regex Tester above — paste your pattern and test string, select modifiers like <code>/g</code>, <code>/i</code>, or <code>/m</code>, and see matches highlighted in real time. No local Perl installation or terminal access required.</p>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-q">What makes Perl regex different from other regex flavors?</p>
+            <p class="faq-a">Perl invented many modern regex features that other languages later adopted. Perl regex supports named captures with <code>(?&lt;name&gt;...)</code>, non-greedy quantifiers, lookahead and lookbehind assertions, and the <code>/x</code> modifier for commented patterns. Perl's regex engine is also more flexible with backreferences and complex substitutions using <code>s///e</code>.</p>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-q">How do I write a Perl one-liner to process a file?</p>
+            <p class="faq-a">The basic structure is <code>perl -ne 'print if /pattern/' file.txt</code>. The <code>-n</code> flag loops over each line, <code>-p</code> prints each line automatically, and <code>-i</code> edits files in place. For field extraction, combine with <code>-a</code> for auto-split into <code>@F</code>. Our One-Liner Generator builds these commands interactively.</p>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-q">How do I fix UTF-8 encoding issues in Perl?</p>
+            <p class="faq-a">The most common fix is adding <code>use utf8;</code> at the top of your script to tell Perl your source code is UTF-8, and <code>binmode(STDOUT, ':utf8');</code> to set the output layer. For file I/O, use <code>open(my $fh, '&lt;:utf8', $file)</code>. Our Encoding Utility helps diagnose and fix common Perl Unicode problems.</p>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-q">What is the best way to parse CSV files in Perl?</p>
+            <p class="faq-a">For production use, the standard is <code>Text::CSV</code> from CPAN, which handles quoted fields, embedded newlines, and custom delimiters correctly. Avoid splitting on commas directly — it breaks on quoted values. Our Perl CSV Parser implements robust parsing logic and lets you test transformations without writing a full script.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- LONG-TAIL QUERIES -->
+<section>
+    <div class="section-header">
+        <h2>Common Search Queries</h2>
+        <span class="section-rule"></span>
+    </div>
+    <div class="tag-cloud">
+        <span class="tag">perl regex tester online free</span>
+        <span class="tag">test perl regular expression online</span>
+        <span class="tag">perl one-liner examples for text processing</span>
+        <span class="tag">how to parse csv in perl</span>
+        <span class="tag">perl log parser for apache and nginx</span>
+        <span class="tag">perl utf-8 encoding fix tool</span>
+        <span class="tag">perl named capture groups regex</span>
+        <span class="tag">perl string substitution online</span>
+        <span class="tag">perl regex visualizer tool</span>
+        <span class="tag">perl -ne -pe one-liner generator</span>
+        <span class="tag">perl text similarity comparison</span>
+        <span class="tag">debug perl script online</span>
+        <span class="tag">perl regex vs python regex differences</span>
+        <span class="tag">perl data extraction from log files</span>
+        <span class="tag">perl tools for data engineers</span>
+    </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-<p>Perl tools designed for developers, data engineers, and automation workflows. Optimize parsing, regex operations, and text processing with high-performance utilities.</p>
+    <div class="footer-inner">
+        <span class="footer-brand">Perl Tools Online</span>
+        <p>11 free tools for developers, data engineers, and automation workflows.</p>
+    </div>
 </footer>
 
+
+</div>
 </body>
 </html>
